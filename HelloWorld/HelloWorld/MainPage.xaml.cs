@@ -56,4 +56,13 @@ namespace HelloWorld
             //nav();
         }
     }
+
+    /*public class MainViewModel
+    {
+        public MainViewModel()
+        {
+            HandleClickMe = new Command(() );
+        }
+        public ICommand HandleClickMe { get; set; }
+    }*/
 }

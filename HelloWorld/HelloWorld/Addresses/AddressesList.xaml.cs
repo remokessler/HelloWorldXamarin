@@ -15,7 +15,7 @@ namespace HelloWorld.Addresses
             InitializeComponent();
             BindingContext = alvm;
             AddressList.SelectionChanged += alvm.Addresses_SelectedItemChanged;
-            alvm.NavigateToPage = (Page p) => Navigation.PushAsync(p);
+            alvm.NavigateToPage = (int id) => Navigation.PushAsync(new AddressesDetail(id));
         }
     }
 }
