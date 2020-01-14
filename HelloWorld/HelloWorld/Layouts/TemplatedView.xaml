@@ -1,0 +1,13 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="HelloWorld.Layouts.TemplatedView">
+    <ContentView x:Name="contentView" Padding="0,20,0,0" ControlTemplate="{StaticResource TealTemplate}">
+        <StackLayout VerticalOptions="CenterAndExpand">
+            <Label Text="My Button" HorizontalOptions="Center"/>
+            <Button Text="My Button"/>
+        </StackLayout>
+    </ContentView>
+</ContentPage>

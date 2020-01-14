@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="HelloWorld.NoteDetailPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry Keyboard="Text" Text="{Binding Title}" MaxLength="16"/>
+            <TimePicker Time="{Binding TimeDemo}"/>
+            <DatePicker Date="{Binding DatePickerDemo}"/>
+            <Switch IsEnabled="True" IsToggled="{Binding SwitchDemo}"/>
+            <CheckBox IsChecked="{Binding CheckBoxDemo}"/>
+            <Label Text="{Binding Source={x:Reference slider},
+                              Path=Value,
+                              StringFormat='The Slider value is {0:F0}'}"/>
+            <Slider Maximum="50" x:Name="slider" Value="{Binding SliderDemo}"/>
+            <Label Text="{Binding Source={x:Reference stepper},
+                              Path=Value,
+                              StringFormat='The Steppers value is {0:F0}'}"/>
+            <Stepper Increment="10" Maximum="100" x:Name="stepper" Value="{Binding StepperDemo}"/>
+            <Editor Text="{Binding Text}"/>
+            <Button Text="Save" Clicked="SavedClicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
