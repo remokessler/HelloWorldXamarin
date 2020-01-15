@@ -66,20 +66,19 @@ namespace HelloWorld.Addresses
         public AddressesDetailViewModel(AddressModel am)
         {
             _address = am;
-            SaveBtnPressed = new Command(() => _modify(() => AddressService.Instance.CreateAddress(_address), NavigateBack));
             Init();
         }
 
         public AddressesDetailViewModel(int id)
         {
             _address = AddressService.Instance.GetAddressById(id);
-            SaveBtnPressed = new Command(() => _modify(() => AddressService.Instance.UpdateAddress(_address), NavigateBack));
             Init();
         }
 
         private void Init()
         {
-            DeleteBtnPressed = new Command(() => _modify(() => AddressService.Instance.DeleteAddress(Id), NavigateBack));
+            SaveBtnPressed = new Command(() => _modify(() => AddressService.Instance.SaveAddress(_address), NavigateBack));
+            DeleteBtnPressed = new Command(() => _modify(() => AddressService.Instance.DeleteAddress(_address), NavigateBack));
             Swiped = new Command(() => NavigateBack());
         }
 

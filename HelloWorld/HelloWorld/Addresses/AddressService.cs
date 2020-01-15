@@ -14,61 +14,38 @@ namespace HelloWorld.Addresses
 
         private AddressService()
         {
-            Addresses = new ObservableCollection<AddressModel>(new AddressModel[]
-            {
-                new AddressModel()
-                {
-                    Id = 1,
-                    Firstname = "Max",
-                    Lastname = "Muster",
-                    Birthdate = new DateTime(1950, 1,1),
-                    Street = "Musterstrasse 3"
-                },
-                new AddressModel()
-                {
-                    Id = 2,
-                    Firstname = "Fritzli",
-                    Lastname = "Muster",
-                    Birthdate = new DateTime(2000,2,2),
-                    Street = "Musterstrasse 28"
-                },
-                new AddressModel()
-                {
-                    Id = 3,
-                    Firstname = "Vreni",
-                    Lastname = "Muster",
-                    Birthdate = new DateTime(1980, 3, 3),
-                    Street = "Musterstrasse 12"
-                }
-            });
+            RefreshAddresses();
+        }
+
+        private void RefreshAddresses()
+        {
+            Addresses = new ObservableCollection<AddressModel>(AddressDataAccess.Instance.GetAllAddresses().Result);
         }
 
         public AddressModel GetAddressById(int id)
         {
-            return Addresses.First(add => add.Id == id);
+            return AddressDataAccess.Instance.GetAddressById(id).Result;
         }
 
-        public void DeleteAddress(int id)
+        public void DeleteAddress(AddressModel am)
         {
-            var am = Addresses.First(a => a.Id == id);
+            AddressDataAccess.Instance.DeleteAddress(am);
             Addresses.Remove(am);
             CrudNotificatorEventHandler(am, new CrudEventArgs(Change.Delete));
         }
 
-        public void CreateAddress(AddressModel am)
+        public void SaveAddress(AddressModel am)
         {
-            var ids = Addresses.Select(a => a.Id).OrderBy(a => a);
-            var firstMissing = Enumerable.Range(1, ids.Last() + 1).Where(i => !ids.Contains(i)).First();
-            am.Id = firstMissing;
-            Addresses.Add(am);
+            AddressDataAccess.Instance.SaveAddress(am);
+            if(am.Id != 0 && Addresses.Any(a => a.Id == am.Id))
+            {
+                var index = Addresses.IndexOf(Addresses.First(a => a.Id == am.Id));
+                Addresses[index] = am;
+            }
+            else
+                RefreshAddresses();
+            
             CrudNotificatorEventHandler(am, new CrudEventArgs(Change.Create));
-        }
-
-        public void UpdateAddress(AddressModel am)
-        {
-            var index = Addresses.IndexOf(Addresses.First(a => a.Id == am.Id));
-            Addresses[index] = am;
-            CrudNotificatorEventHandler(am, new CrudEventArgs(Change.Update));
         }
     }
 }
