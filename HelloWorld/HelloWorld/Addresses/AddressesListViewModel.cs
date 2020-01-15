@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Xamarin.Forms;
+using System.Linq;
 
 namespace HelloWorld.Addresses
 {
     public class AddressesListViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private AddressModel _selectedItem = null;
-        public AddressModel SelectedItem
+        private AddressesDetailViewModel _selectedItem = null;
+        public AddressesDetailViewModel SelectedItem
         {
             get => _selectedItem;
             set
@@ -21,11 +20,27 @@ namespace HelloWorld.Addresses
                 NavigateToDetail();
             }
         }
-        public ObservableCollection<AddressModel> Addresses { get; set; }
+        public ObservableCollection<AddressesDetailViewModel> Addresses { get; set; }
 
         public AddressesListViewModel()
         {
-            Addresses = AddressService.Instance.Addresses;
+            AddressService.Instance.CrudNotificatorEventHandler += CrudNotificationHandler;
+            Addresses = new ObservableCollection<AddressesDetailViewModel> (AddressService.Instance.Addresses.Select(am => new AddressesDetailViewModel(am)));
+        }
+
+        private void CrudNotificationHandler(object sender, CrudEventArgs e)
+        {
+            var am = (AddressModel)sender;
+            if (e.Change == Change.Update)
+            {
+                var id = Addresses.IndexOf(Addresses.First(advm => advm.Id == ((AddressModel)sender).Id));
+                Addresses[id] = new AddressesDetailViewModel(am);
+                PropertyChanged(Addresses.First(advm => advm.Id == am.Id), new PropertyChangedEventArgs("Addresses"));
+            }
+            else if (e.Change == Change.Create)
+                Addresses.Add(new AddressesDetailViewModel(am));
+            else if (e.Change == Change.Delete)
+                Addresses.Remove(Addresses.First(advm => advm.Id == am.Id));
         }
 
         public Action<int> NavigateToPage = new Action<int>((int id) => { });
@@ -39,22 +54,8 @@ namespace HelloWorld.Addresses
             if (SelectedItem == null) return;
 
             var id = SelectedItem.Id;
-            NavigateToPage(id);
+            Navigate(id, NavigateToPage);
             SelectedItem = null;
-        }
-
-        public void Addresses_SelectedItemChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var col = (CollectionView)sender;
-            if (SelectedItem == null && col.SelectedItem == null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedItem"));
-                return;
-            }
-            var id = ((AddressModel)col.SelectedItem).Id;
-            Navigate.Invoke(id, NavigateToPage);
-            SelectedItem = null;
-            PropertyChanged(this, new PropertyChangedEventArgs("SelectedItem"));
         }
     }
 }

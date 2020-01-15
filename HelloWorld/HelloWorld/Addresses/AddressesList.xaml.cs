@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace HelloWorld.Addresses
@@ -12,9 +9,8 @@ namespace HelloWorld.Addresses
         private AddressesListViewModel alvm = new AddressesListViewModel();
         public AddressesList()
         {
-            InitializeComponent();
             BindingContext = alvm;
-            AddressList.SelectionChanged += alvm.Addresses_SelectedItemChanged;
+            InitializeComponent();
             alvm.NavigateToPage = (int id) => Navigation.PushAsync(new AddressesDetail(id));
         }
     }

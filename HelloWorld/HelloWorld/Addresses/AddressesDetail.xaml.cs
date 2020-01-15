@@ -16,7 +16,7 @@ namespace HelloWorld.Addresses
 
         protected override void OnDisappearing()
         {
-            advm.SaveAndNotifyOnPageLeave();
+            advm.Save();
             base.OnDisappearing();
         }
     }

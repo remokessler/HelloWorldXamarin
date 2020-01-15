@@ -9,7 +9,7 @@
         <CollectionView x:Name="AddressList" 
                         ItemsSource="{Binding Addresses}" 
                         SelectionMode="Single" 
-                        SelectedItem="{Binding SelectedItem}">
+                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 
 namespace HelloWorld.Addresses
@@ -8,17 +7,11 @@ namespace HelloWorld.Addresses
     public class AddressService
     {
         private static AddressService instance;
-        public static AddressService Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new AddressService();
-                return instance;
-            }
-        }
+        public static AddressService Instance => instance ?? (instance = new AddressService());
 
-        public ObservableCollection<AddressModel> Addresses { get; }
+        public ObservableCollection<AddressModel> Addresses { get; private set; }
+        public event EventHandler<CrudEventArgs> CrudNotificatorEventHandler;
+
         private AddressService()
         {
             Addresses = new ObservableCollection<AddressModel>(new AddressModel[]
@@ -49,16 +42,32 @@ namespace HelloWorld.Addresses
                 }
             });
         }
+
         public AddressModel GetAddressById(int id)
         {
             return Addresses.First(add => add.Id == id);
         }
 
-        public void ReplaceAddress(AddressModel am, PropertyChangedEventHandler e)
+        public void DeleteAddress(AddressModel am)
+        {
+            Addresses.Remove(am);
+            CrudNotificatorEventHandler(am, new CrudEventArgs(Change.Delete));
+        }
+
+        public void Create(AddressModel am)
+        {
+            var ids = Addresses.Select(a => a.Id).OrderBy(a => a);
+            var firstMissing = Enumerable.Range(1, ids.Last() + 1).Where(i => !ids.Contains(i)).First();
+            am.Id = firstMissing;
+            Addresses.Add(am);
+            CrudNotificatorEventHandler(am, new CrudEventArgs(Change.Create));
+        }
+
+        public void UpdateAddress(AddressModel am)
         {
             var index = Addresses.IndexOf(Addresses.First(a => a.Id == am.Id));
             Addresses[index] = am;
-            e(Addresses, new PropertyChangedEventArgs("Addresses"));
+            CrudNotificatorEventHandler(am, new CrudEventArgs(Change.Update));
         }
     }
 }

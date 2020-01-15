@@ -6,23 +6,28 @@ namespace HelloWorld.Addresses
 {
     public class AddressesDetailViewModel : INotifyPropertyChanged
     {
-        private const string _lastname = "Lastname";
-        private const string _firstname = "Firstname";
-        private const string _birthdate = "Birthdate";
-        private const string _street = "Street";
-
         private AddressModel address { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-        private List<string> IsDirty = new List<string>();
+
+        public int Id
+        {
+            get => address.Id;
+            private set
+            {
+                if (address.Id == value) return;
+                address.Id = value;
+                PropertyChanged(address, new PropertyChangedEventArgs("Id"));
+            }
+        }
 
         public string Firstname 
         { 
             get => address.Firstname;
             set 
             {
+                if (address.Firstname == value) return;
                 address.Firstname = value;
-                if (!IsDirty.Contains(_firstname))
-                    IsDirty.Add(_firstname);
+                PropertyChanged(address, new PropertyChangedEventArgs("Firstname"));
             }
         }
         public string Lastname
@@ -30,9 +35,9 @@ namespace HelloWorld.Addresses
             get => address.Lastname;
             set 
             {
+                if (address.Lastname == value) return;
                 address.Lastname = value;
-                if (!IsDirty.Contains(_lastname))
-                    IsDirty.Add(_lastname);
+                PropertyChanged(address, new PropertyChangedEventArgs("Lastname"));
             }
         }
         public DateTime Birthdate
@@ -40,9 +45,9 @@ namespace HelloWorld.Addresses
             get => address.Birthdate;
             set
             {
+                if (address.Birthdate == value) return;
                 address.Birthdate = value;
-                if (!IsDirty.Contains(_birthdate))
-                    IsDirty.Add(_birthdate);
+                PropertyChanged(address, new PropertyChangedEventArgs("Birthdate"));
             }
         }
         public string Street
@@ -50,10 +55,15 @@ namespace HelloWorld.Addresses
             get => address.Street;
             set
             {
+                if (address.Street == value) return;
                 address.Street = value;
-                if (!IsDirty.Contains(_street))
-                    IsDirty.Add(_street);
+                PropertyChanged(address, new PropertyChangedEventArgs("Street"));
             }
+        }
+
+        public AddressesDetailViewModel(AddressModel am)
+        {
+            address = am;
         }
 
         public AddressesDetailViewModel(int id)
@@ -61,13 +71,9 @@ namespace HelloWorld.Addresses
             address = AddressService.Instance.GetAddressById(id);
         }
 
-        public void SaveAndNotifyOnPageLeave()
+        public void Save()
         {
-            if(IsDirty?.Count > 0)
-            {
-                AddressService.Instance.ReplaceAddress(address, PropertyChanged);
-                IsDirty.ForEach(name => PropertyChanged(this, new PropertyChangedEventArgs(name)));
-            }
+            AddressService.Instance.UpdateAddress(address);
         }
 
     }
