@@ -48,13 +48,14 @@ namespace HelloWorld.Addresses
             return Addresses.First(add => add.Id == id);
         }
 
-        public void DeleteAddress(AddressModel am)
+        public void DeleteAddress(int id)
         {
+            var am = Addresses.First(a => a.Id == id);
             Addresses.Remove(am);
             CrudNotificatorEventHandler(am, new CrudEventArgs(Change.Delete));
         }
 
-        public void Create(AddressModel am)
+        public void CreateAddress(AddressModel am)
         {
             var ids = Addresses.Select(a => a.Id).OrderBy(a => a);
             var firstMissing = Enumerable.Range(1, ids.Last() + 1).Where(i => !ids.Contains(i)).First();

@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.Threading.Tasks;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace HelloWorld.Addresses
@@ -11,13 +12,21 @@ namespace HelloWorld.Addresses
         {
             InitializeComponent();
             advm = new AddressesDetailViewModel(id);
+            advm.NavigateBack = new System.Action(() => Navigation.PopAsync());
+            BindingContext = advm;
+        }
+        public AddressesDetail()
+        {
+            InitializeComponent();
+            advm = new AddressesDetailViewModel(new AddressModel());
+            advm.NavigateBack = new System.Action(() => Navigation.PopAsync());
             BindingContext = advm;
         }
 
-        protected override void OnDisappearing()
+        private void PinchGestureRecognizer_PinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
         {
-            advm.Save();
-            base.OnDisappearing();
+            //My Super Easteregg
+            Background.BackgroundColor = Color.HotPink;
         }
     }
 }

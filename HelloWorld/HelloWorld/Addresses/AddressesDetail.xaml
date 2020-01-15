@@ -6,7 +6,11 @@
              mc:Ignorable="d"
              x:Class="HelloWorld.Addresses.AddressesDetail">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout x:Name="Background">
+            <StackLayout.GestureRecognizers>
+                <SwipeGestureRecognizer Direction="Right" Command="{Binding Swiped}"/>
+                <PinchGestureRecognizer PinchUpdated="PinchGestureRecognizer_PinchUpdated" />
+            </StackLayout.GestureRecognizers>
             <StackLayout Orientation="Vertical">
                 <StackLayout>
                     <Label Text="Firstname"/>
@@ -21,6 +25,10 @@
             <DatePicker Date="{Binding Birthdate}" />
             <Label Text="Street" />
             <Entry Text="{Binding Street}" />
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                <Button Text="Save" Command="{Binding SaveBtnPressed}" HorizontalOptions="FillAndExpand" BackgroundColor="LimeGreen" Margin="12, 12, 6, 12"/>
+                <Button Text="Delete" Command="{Binding DeleteBtnPressed}" HorizontalOptions="FillAndExpand" BackgroundColor="Tomato" Margin="6, 12, 12, 12"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace HelloWorld.Addresses
 {
@@ -26,6 +28,7 @@ namespace HelloWorld.Addresses
         {
             AddressService.Instance.CrudNotificatorEventHandler += CrudNotificationHandler;
             Addresses = new ObservableCollection<AddressesDetailViewModel> (AddressService.Instance.Addresses.Select(am => new AddressesDetailViewModel(am)));
+            AddNew = new Command(() => OpenNewPage());
         }
 
         private void CrudNotificationHandler(object sender, CrudEventArgs e)
@@ -44,6 +47,7 @@ namespace HelloWorld.Addresses
         }
 
         public Action<int> NavigateToPage = new Action<int>((int id) => { });
+        public Action OpenNewPage = new Action(() => { });
         private Action<int, Action<int>> Navigate = new Action<int, Action<int>>((int id, Action<int> t) =>
         {
             t.Invoke(id);
@@ -57,5 +61,7 @@ namespace HelloWorld.Addresses
             Navigate(id, NavigateToPage);
             SelectedItem = null;
         }
+
+        public ICommand AddNew { get; set; }
     }
 }

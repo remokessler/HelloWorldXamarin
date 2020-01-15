@@ -9,9 +9,10 @@ namespace HelloWorld.Addresses
         private AddressesListViewModel alvm = new AddressesListViewModel();
         public AddressesList()
         {
-            BindingContext = alvm;
             InitializeComponent();
+            BindingContext = alvm;
             alvm.NavigateToPage = (int id) => Navigation.PushAsync(new AddressesDetail(id));
+            alvm.OpenNewPage = () => Navigation.PushAsync(new AddressesDetail());
         }
     }
 }

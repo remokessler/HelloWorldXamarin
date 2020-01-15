@@ -6,28 +6,43 @@
              mc:Ignorable="d"
              x:Class="HelloWorld.Addresses.AddressesList">
     <ContentPage.Content>
-        <CollectionView x:Name="AddressList" 
+        <StackLayout>
+            <ScrollView>
+                <CollectionView x:Name="AddressList" 
                         ItemsSource="{Binding Addresses}" 
                         SelectionMode="Single" 
                         SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Label>
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding Firstname}" FontSize="Title"></Span>
-                                    <Span Text="   "></Span>
-                                    <Span Text="{Binding Lastname}" FontSize="Title"></Span>
-                                    <Span Text="   "></Span>
-                                    <Span Text="{Binding Street}" FontSize="Subtitle" TextColor="DarkGray"></Span>
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-                        <BoxView VerticalOptions="End" HorizontalOptions="Fill" HeightRequest="1" Color="Gray"/>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </ContentPage.Content>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Label>
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Firstname}" FontSize="Title"></Span>
+                                            <Span Text="   "></Span>
+                                            <Span Text="{Binding Lastname}" FontSize="Title"></Span>
+                                            <Span Text="   "></Span>
+                                            <Span Text="{Binding Street}" FontSize="Subtitle" TextColor="DarkGray"></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <BoxView VerticalOptions="End" HorizontalOptions="Fill" HeightRequest="1" Color="Gray"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+            <Button Text="+" 
+                    Margin="10"
+                    FontSize="Title" 
+                    TextColor="LightGray"
+                    CornerRadius="30" 
+                    WidthRequest="60" 
+                    HeightRequest="60" 
+                    BackgroundColor="#436FFF" 
+                    VerticalOptions="End" 
+                    HorizontalOptions="End"
+                    Command="{Binding AddNew}"/>
+        </StackLayout>
+    </ContentPage.Content>    
 </ContentPage>

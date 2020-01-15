@@ -1,80 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace HelloWorld.Addresses
 {
     public class AddressesDetailViewModel : INotifyPropertyChanged
     {
-        private AddressModel address { get; set; }
+        private AddressModel _address { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int Id
         {
-            get => address.Id;
+            get => _address.Id;
             private set
             {
-                if (address.Id == value) return;
-                address.Id = value;
-                PropertyChanged(address, new PropertyChangedEventArgs("Id"));
+                if (_address.Id == value) return;
+                _address.Id = value;
+                PropertyChanged(_address, new PropertyChangedEventArgs("Id"));
             }
         }
-
         public string Firstname 
         { 
-            get => address.Firstname;
+            get => _address.Firstname;
             set 
             {
-                if (address.Firstname == value) return;
-                address.Firstname = value;
-                PropertyChanged(address, new PropertyChangedEventArgs("Firstname"));
+                if (_address.Firstname == value) return;
+                _address.Firstname = value;
+                PropertyChanged(_address, new PropertyChangedEventArgs("Firstname"));
             }
         }
         public string Lastname
         { 
-            get => address.Lastname;
+            get => _address.Lastname;
             set 
             {
-                if (address.Lastname == value) return;
-                address.Lastname = value;
-                PropertyChanged(address, new PropertyChangedEventArgs("Lastname"));
+                if (_address.Lastname == value) return;
+                _address.Lastname = value;
+                PropertyChanged(_address, new PropertyChangedEventArgs("Lastname"));
             }
         }
         public DateTime Birthdate
         {
-            get => address.Birthdate;
+            get => _address.Birthdate;
             set
             {
-                if (address.Birthdate == value) return;
-                address.Birthdate = value;
-                PropertyChanged(address, new PropertyChangedEventArgs("Birthdate"));
+                if (_address.Birthdate == value) return;
+                _address.Birthdate = value;
+                PropertyChanged(_address, new PropertyChangedEventArgs("Birthdate"));
             }
         }
         public string Street
         {
-            get => address.Street;
+            get => _address.Street;
             set
             {
-                if (address.Street == value) return;
-                address.Street = value;
-                PropertyChanged(address, new PropertyChangedEventArgs("Street"));
+                if (_address.Street == value) return;
+                _address.Street = value;
+                PropertyChanged(_address, new PropertyChangedEventArgs("Street"));
             }
         }
 
         public AddressesDetailViewModel(AddressModel am)
         {
-            address = am;
+            _address = am;
+            SaveBtnPressed = new Command(() => _modify(() => AddressService.Instance.CreateAddress(_address), NavigateBack));
+            Init();
         }
 
         public AddressesDetailViewModel(int id)
         {
-            address = AddressService.Instance.GetAddressById(id);
+            _address = AddressService.Instance.GetAddressById(id);
+            SaveBtnPressed = new Command(() => _modify(() => AddressService.Instance.UpdateAddress(_address), NavigateBack));
+            Init();
         }
 
-        public void Save()
+        private void Init()
         {
-            AddressService.Instance.UpdateAddress(address);
+            DeleteBtnPressed = new Command(() => _modify(() => AddressService.Instance.DeleteAddress(Id), NavigateBack));
+            Swiped = new Command(() => NavigateBack());
         }
 
+        public Action NavigateBack = new Action(() => { });
+        private Action<Action, Action> _modify = new Action<Action, Action>((Action crud, Action nav) => {
+            crud();
+            nav();
+        });
+
+        public ICommand SaveBtnPressed { get; set; }
+        public ICommand DeleteBtnPressed { get; set; }
+        public ICommand Swiped { get; set; }
     }
 }
