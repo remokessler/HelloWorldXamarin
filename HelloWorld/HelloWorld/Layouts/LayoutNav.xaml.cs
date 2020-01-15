@@ -16,7 +16,7 @@ namespace HelloWorld.Layouts
         {
             InitializeComponent();
             lnvm = new LayoutNavViewModel(Navigation);
-            Pages = new ObservableCollection<Page>(lnvm.Pages);
+            //Pages = new ObservableCollection<Page>(lnvm.Pages);
             BindingContext = Pages;
         }
 

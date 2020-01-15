@@ -13,7 +13,7 @@ namespace HelloWorld.Maps
             InitializeComponent();
         }
 
-        private async void OpenMapsAtMyLocation(object sender, EventArgs e)
+        private void OpenMapsAtMyLocation(object sender, EventArgs e)
         {
 
             //await Map.OpenAsync();
